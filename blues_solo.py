@@ -11,7 +11,7 @@ SAMPLES_DIR = os.path.join(os.path.dirname(__file__), "samples")
 
 SAMPLE_FILE = os.path.join(SAMPLES_DIR, "bass_D2.wav")
 SAMPLE_NOTE = D2  # the sample file plays at this pitch
-
+VOLUMES = [.1, -.1]
 
 def play_note(note, beats=1, bpm=60, amp=1):
     """Plays note for `beats` beats. Returns when done."""
@@ -39,4 +39,29 @@ atexit.register(stop)  # stop all tracks when the program exits normally or is i
 blues_scale = [40, 43, 45, 46, 47, 50, 52, 55, 57, 58, 59, 62, 64, 67, 69, 70, 71, 74, 76]
 beats_per_minute = 45				# Let's make a slow blues solo
 
-play_note(blues_scale[0], beats=1, bpm=beats_per_minute)
+curr_note = 0
+#play_note(blues_scale[curr_note], 1, beats_per_minute)
+licks = [[(1, 0.5* 1.2), (1, 0.5 * 0.8), (1, 0.5 * 1.2), (1, 0.5 * 0.8)], [(-1, 0.5 * 1.2), (-1, 0.5 * 0.8), (-1, 0.5 * 1.2), (-1, 0.5 * 0.8)]]
+[(1, 0.5)]
+secondlicks = [[(2, 0.5), (2, 0.5), (-1, 0.5), (2, 0.5)]]
+amp = 1
+for x in range(5):
+    lick = random.choice(licks)
+    checkr = 1
+    for note in lick:
+        amp+=random.choice(VOLUMES)
+        curr_note += note[0]
+        if curr_note > len(blues_scale)-1:
+            curr_note = 1
+            play_note(blues_scale[curr_note], len(lick)-checkr, beats_per_minute, amp)
+            break
+        elif curr_note < 0:
+            curr_note = 0
+            play_note(blues_scale[curr_note], len(lick)-checkr, beats_per_minute, amp)
+            break
+        else:
+            play_note(blues_scale[curr_note], note[1], beats_per_minute, amp)
+        checkr += 1
+
+# for note in blues_scale:
+    # play_note(note, beats=1, bpm=beats_per_minute)
